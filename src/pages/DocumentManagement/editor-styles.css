@@ -1,0 +1,123 @@
+/* Table styles */
+.ql-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.ql-editor table td,
+.ql-editor table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  min-width: 50px;
+}
+
+.ql-editor table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #f2f2f2;
+}
+
+/* Watermark styles */
+.ql-editor .watermark-container {
+  position: relative;
+  width: 100%;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.ql-editor .watermark-text {
+  opacity: 0.2;
+  color: #888;
+  font-size: 48px;
+  transform: rotate(-45deg);
+  pointer-events: none;
+}
+
+.ql-editor .watermark-image {
+  opacity: 0.1;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+/* Signature styles */
+.ql-editor .signature-container {
+  margin: 10px 0;
+  display: inline-block;
+}
+
+/* Image resize handles */
+.ql-editor .image-resizer {
+  display: none;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background-color: #0066cc;
+  border: 1px solid white;
+}
+
+.ql-editor img:hover .image-resizer {
+  display: block;
+}
+
+/* Custom toolbar buttons */
+.ql-signature, .ql-watermark, .ql-table {
+  position: relative;
+}
+
+.ql-signature svg, .ql-watermark svg, .ql-table svg {
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+}
+
+/* Signature canvas */
+.signature-canvas {
+  width: 100%;
+  height: 200px;
+  border: 1px solid #ccc;
+}
+
+/* Saved signatures grid */
+.saved-signatures-container {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .saved-signatures-container .signature-option {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .saved-signatures-container .signature-option img {
+    max-width: 100%;
+    max-height: 80px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    background-color: white;
+  }
+  
+  /* Table dialog preview */
+  .table-preview table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .table-preview td, .table-preview th {
+    border: 1px solid #ddd;
+    padding: 4px;
+    font-size: 12px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .ql-editor {
+      min-height: 300px;
+    }
+    
+    .signature-canvas {
+      height: 150px;
+    }
+  }

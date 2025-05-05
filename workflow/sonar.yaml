@@ -1,0 +1,32 @@
+name: SonarQube Manual Scan
+
+on:
+  workflow_dispatch:  # Enables manual trigger from GitHub UI
+
+jobs:
+  sonar:
+    name: SonarQube Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+         fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Run Tests and Generate Coverage
+      run: npm test -- --coverage
+
+    - name: Run SonarQube Scanner
+      run: npx sonarqube-scanner
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

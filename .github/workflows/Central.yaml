@@ -1,0 +1,17 @@
+name: Central Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-build:
+    uses: ./.github/workflows/build.yaml
+
+  run-sonarqube:
+    needs: run-build
+    uses: ./.github/workflows/SonarQube.yml
+
+  run-selenium:
+    needs: run-sonarqube
+    uses: ./.github/workflows/maven.yml
+

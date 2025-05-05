@@ -1,0 +1,117 @@
+export const packagesArray = [
+  {
+    label: "Foundation",
+    value: "Foundation",
+    price: 5,
+    package: ["Essential Plan"],
+  },
+  // {
+  //   label: "Selfie punch geofencing",
+  //   value: "Selfie punch geofencing",
+  //   price: 15,
+  //   package: [ "Essential Plan"],
+  // },
+  {
+    label: "Performance",
+    value: "Performance",
+    price: 50,
+    package: ["Enterprise Plan", "Intermediate Plan"],
+  },
+  {
+    label: "Remote Punching",
+    value: "Remote Punching",
+    price: 60,
+    package: [
+      "Enterprise Plan",
+      "Basic Plan",
+      "Essential Plan",
+      "Intermediate Plan",
+    ],
+  },
+  {
+    label: "Remote Task",
+    value: "Remote Task",
+    price: 30,
+    package: ["Enterprise Plan", "Intermediate Plan"],
+  },
+  {
+    label: "Fullskape",
+    value: "Fullskape",
+    price: 15,
+    package: [
+      "Enterprise Plan",
+      "Basic Plan",
+      "Essential Plan",
+      "Intermediate Plan",
+    ],
+  },
+  // {
+  //   label: "Recruitment",
+  //   value: "Recruitment",
+  //   price: 30,
+  //   package: ["Enterprise Plan", "Intermediate Plan"],
+  // },
+  {
+    label: "QR Code Attendance",
+    value: "QR Code Attendance",
+    price: 20,
+    package: ["Enterprise Plan", "Intermediate Plan"],
+  },
+  {
+    label: "Expense Management",
+    value: "Expense Management",
+    price: 50,
+    package: ["Enterprise Plan", "Intermediate Plan"],
+  },
+  {
+    label: "Food & Catering",
+    value: "Food & Catering",
+    price: 30,
+    package: ["Enterprise Plan", "Intermediate Plan"],
+  },
+  {
+    label: "HR Help Desk",
+    value: "HR Help Desk",
+    price: 50,
+    package: ["Enterprise Plan", "Intermediate Plan"],
+  },
+  {
+    label: "Basic SkillMatrix",
+    value: "Basic SkillMatrix",
+    price: 0,
+    package: [
+      "Essential Plan",
+      "Basic Plan",
+      "Intermediate Plan",
+      "Enterprise Plan",
+    ],
+  },
+  {
+    label: "Advanced SkillMatrix",
+    value: "Advanced SkillMatrix",
+    price: 150,
+    package: [
+      "Essential Plan",
+      "Basic Plan",
+      "Intermediate Plan",
+      "Enterprise Plan",
+    ],
+  },
+  {
+    label: "Hiring",
+    value: "Hiring",
+    price: 50,
+    package: [
+      "Essential Plan",
+      "Basic Plan",
+      "Intermediate Plan",
+      "Enterprise Plan",
+    ],
+  },
+  {
+    label: "Task Management",
+    value: "Task Management",
+    price: 30,
+    package: ["Enterprise Plan", "Intermediate Plan"],
+  },
+];
