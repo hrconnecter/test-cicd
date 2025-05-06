@@ -22,7 +22,6 @@ jobs:
           cd aegis
           mvn clean test
 
-      
       - name: 🧪 Run Selected Selenium Tests in Headless Mode
         env:
           GITHUB_ACTIONS: true
@@ -79,9 +78,9 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_U }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: GitHub Actions - Selenium Test Report
+          from: ${{ secrets.EMAIL_U }}
           to: yash.shirke@argantechnology.com
-          from: ${{ secrets.EMAIL_U }}  # This was missing
+          subject: GitHub Actions - Selenium Test Report
           body: |
             Hi Yash,
 
