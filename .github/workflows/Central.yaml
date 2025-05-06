@@ -1,31 +1,11 @@
 name: Central Workflow
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Manually trigger the workflow
 
 jobs:
   run-selenium:
-    uses: ./.github/workflows/Selenium.yml
-
-
-
-# name: Central Workflow
-
-# on:
-#   workflow_dispatch:
-
-# jobs:
-#   run-selenium:
-#     uses: ./.github/workflows/Selenium.yml
-
-
-
-
-
-
-
-
-
+    uses: ./.github/workflows/Selenium.yml  # Use the reusable Selenium workflow
 
 
 
