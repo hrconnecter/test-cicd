@@ -81,7 +81,7 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: GitHub Actions - Selenium Test Report
           to: yash.shirke@argantechnology.com
-          from: ${{ secrets.EMAIL_USERNAME }}
+          from: ${{ secrets.EMAIL_USERNAME }}  # This was missing
           body: |
             Hi Yash,
 
