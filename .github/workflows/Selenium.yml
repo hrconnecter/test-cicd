@@ -22,9 +22,7 @@ jobs:
           cd aegis
           mvn clean test
 
-      - name: 🛠️ Debug: List directory contents
-        run: ls -R
-
+      
       - name: 🧪 Run Selected Selenium Tests in Headless Mode
         env:
           GITHUB_ACTIONS: true
