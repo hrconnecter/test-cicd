@@ -5,7 +5,7 @@ on:
 
 jobs:
   run-selenium:
-    uses: ./aegis/SonarQube.yml
+    uses: ./aegis/maven.yml
 
 
 
