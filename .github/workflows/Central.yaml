@@ -5,7 +5,8 @@ on:
 
 jobs:
   run-selenium:
-    uses: ./.github/workflows/maven.yml
+    uses: ./.github/workflows/Salenium.yml
+
 
 
 
