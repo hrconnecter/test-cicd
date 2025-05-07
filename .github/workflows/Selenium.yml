@@ -74,7 +74,7 @@ jobs:
         if: always()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.hostinger.com
+          server_address: smtp.mail.att.net
           server_port: 465
           username: ${{ secrets.NEW_EMAIL_USERNAME }}
           password: ${{ secrets.NEW_EMAIL_PASSWORD }}
