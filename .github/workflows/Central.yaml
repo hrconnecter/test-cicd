@@ -1,30 +1,29 @@
-name: Central Workflow
-
-on:
-  workflow_dispatch:  # Manually trigger the workflow
-
-jobs:
-  run-selenium:
-    uses: ./.github/workflows/Selenium.yml  # Use the reusable Selenium workflow
-
-
-
-
-
 # name: Central Workflow
 
 # on:
-#   workflow_dispatch:
+#   workflow_dispatch:  # Manually trigger the workflow
 
 # jobs:
-#   run-build:
-#     uses: ./.github/workflows/build.yaml
-
-#   run-sonarqube:
-#     needs: run-build
-#     uses: ./.github/workflows/SonarQube.yml
-
 #   run-selenium:
-#     needs: run-sonarqube
-#     uses: ./.github/workflows/maven.yml
+#     uses: ./.github/workflows/Selenium.yml  # Use the reusable Selenium workflow
 
+
+
+
+
+name: Central Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-build:
+    uses: ./.github/workflows/build.yaml
+
+  run-sonarqube:
+    needs: run-build
+    uses: ./.github/workflows/SonarQube.yml
+
+  run-selenium:
+    uses: ./.github/workflows/Selenium.yml  # Use the reusable Selenium workflow
+  
