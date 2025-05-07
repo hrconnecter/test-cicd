@@ -22,8 +22,6 @@ jobs:
       - name: 🏗️ Build
         run: |
           echo "${{ secrets.PROD_ENV_FILE }}" | base64 --decode > .env
-          # Avoid printing secrets
-          # head .env
           npm run build
 
       - name: 🚀 Upload build
@@ -34,7 +32,8 @@ jobs:
 
   release-project:
     name: 🚀 Release project
-    runs-on: self-hosted
+    runs-on: ubuntu-latest  # ✅ Changed from self-hosted
+
     needs: build
 
     steps:
@@ -46,4 +45,3 @@ jobs:
       - name: 🧪 Test artifact download
         run: |
           ls -R
-          # cat .env  # ❌ Don't expose secrets
