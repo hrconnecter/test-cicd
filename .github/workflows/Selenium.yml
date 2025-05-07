@@ -74,7 +74,7 @@ jobs:
         if: always()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.mail.aegiz.net
+          server_address: mail.aegiz.net
           server_port: 465
           username: qa_report@aegiz.net
           password: ${{ secrets.NEW_EMAIL_PASSWORD }}
