@@ -76,9 +76,9 @@ jobs:
         with:
           server_address: smtp.mail.att.net
           server_port: 465
-          username: ${{ secrets.NEW_EMAIL_USERNAME }}
+          username: qa_report@aegiz.net
           password: ${{ secrets.NEW_EMAIL_PASSWORD }}
-          from: ${{ secrets.NEW_EMAIL_USERNAME }}
+          from: qa_report@aegiz.net
           to: yash.shirke@argantechnology.com
           subject: GitHub Actions - Selenium Test Report
           body: |
