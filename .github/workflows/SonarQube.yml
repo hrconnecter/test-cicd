@@ -22,7 +22,7 @@ jobs:
             -d "project=aegis-frontend" || echo "Project may already exist."
 
       - name: Run SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v1.3
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
