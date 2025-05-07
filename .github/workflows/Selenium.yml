@@ -77,7 +77,7 @@ jobs:
           server_address: mail.aegiz.net
           server_port: 465
           username: qa_report@aegiz.net
-          password: ${{ secrets.NEW_EMAIL_PASSWORD }}
+          password: Argan@2406
           from: qa_report@aegiz.net
           to: yash.shirke@argantechnology.com
           subject: GitHub Actions - Selenium Test Report
