@@ -17,7 +17,7 @@ import useAdvanceSalaryQuery from "../../hooks/AdvanceSalaryHook/useAdvanceSalar
 import useCalculateSalaryQuery from "../../hooks/CalculateSalaryHook/useCalculateSalaryQuery";
 import useGetPfEsicSetup from "../../hooks/Salary/useGetPfEsicSetup";
 import { fetchFoundationSetup } from "../SetupPage/Foundationsetup";
-import SalarySlip from "./ salary-slip";
+import SalarySlip from "./salary-slip";
 
 import moment from "moment";
 function CalculateSalary() {
