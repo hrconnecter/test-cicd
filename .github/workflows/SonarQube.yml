@@ -1,4 +1,4 @@
-name: SonarQube Scan
+name: Main Workflow
 
 on:
   workflow_call:
@@ -9,15 +9,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Required for full history scan
 
+      - name: Create SonarQube Project (if not exists)
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" -u ${{ secrets.SONAR_TOKEN }}: \
+            -X POST "${{ vars.SONAR_HOST_URL }}/api/projects/create" \
+            -d "name=aegis-frontend" \
+            -d "project=aegis-frontend" || echo "Project may already exist."
+
       - name: Run SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: sonarsource/sonarqube-scan-action@v1.3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+
 
       # Optional: Fail job if Quality Gate fails
       # - name: Check Quality Gate
