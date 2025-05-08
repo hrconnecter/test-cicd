@@ -2,6 +2,11 @@ name: SonarQube Scan Workflow
 
 on:
   workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      SONAR_HOST_URL:
+        required: true
 
 jobs:
   sonarqube:
@@ -34,6 +39,49 @@ jobs:
         with:
           sonarHostUrl: ${{ secrets.SONAR_HOST_URL }}
           projectKey: aegis-frontend
+
+
+
+
+
+
+
+# name: SonarQube Scan Workflow
+
+# on:
+#   workflow_call:
+
+# jobs:
+#   sonarqube:
+#     name: SonarQube Scan and Quality Gate
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+
+#       - name: Create SonarQube Project (if not exists)
+#         run: |
+#           curl -s -o /dev/null -w "%{http_code}" -u ${{ secrets.SONAR_TOKEN }}: \
+#             -X POST "${{ secrets.SONAR_HOST_URL }}/api/projects/create" \
+#             -d "name=aegis-frontend" \
+#             -d "project=aegis-frontend" || echo "Project may already exist."
+
+#       - name: Run SonarQube Scan
+#         uses: SonarSource/sonarqube-scan-action@v2.0.2
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+#       - name: Check SonarQube Quality Gate
+#         uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#         with:
+#           sonarHostUrl: ${{ secrets.SONAR_HOST_URL }}
+#           projectKey: aegis-frontend
 
 
 
