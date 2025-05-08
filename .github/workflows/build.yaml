@@ -24,6 +24,12 @@ jobs:
           echo "${{ secrets.PROD_ENV_FILE }}" | base64 --decode > .env
           npm run build
 
+      - name: 🔍 Run SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2.0.2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: http://13.202.182.26:9000
+
       - name: 🚀 Upload build
         uses: actions/upload-artifact@v4
         with:
@@ -32,7 +38,7 @@ jobs:
 
   release-project:
     name: 🚀 Release project
-    runs-on: ubuntu-latest  # ✅ Changed from self-hosted
+    runs-on: ubuntu-latest
 
     needs: build
 
