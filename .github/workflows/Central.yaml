@@ -19,10 +19,16 @@ jobs:
   run-build:
     uses: ./.github/workflows/build.yaml
 
+  
   run-sonarqube:
     needs: run-build
     uses: ./.github/workflows/SonarQube.yml
     with:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # This will pass SONAR_TOKEN as an environment variable
-      SONAR_HOST_URL: http://13.202.182.26:9000  # Pass the URL directly as an environment variable
+      SONAR_HOST_URL: http://13.202.182.26:9000
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+
+
 
