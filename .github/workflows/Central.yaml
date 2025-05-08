@@ -24,8 +24,7 @@ jobs:
     uses: ./.github/workflows/SonarQube.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
+      SONAR_HOST_URL: http://13.202.182.26:9000
   run-selenium:
     needs: run-sonarqube
     uses: ./.github/workflows/Selenium.yml
