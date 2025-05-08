@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: http://13.202.182.26:9000
+      SONAR_HOST_URL: http://13.202.182.26:9000  # Updated to your public SonarQube server
 
     steps:
       - name: Checkout Code
@@ -40,9 +40,6 @@ jobs:
         with:
           sonarHostUrl: ${{ env.SONAR_HOST_URL }}
           projectKey: aegis-frontend
-
-
-
 
 
 
