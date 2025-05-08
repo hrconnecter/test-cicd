@@ -19,7 +19,6 @@ jobs:
   run-build:
     uses: ./.github/workflows/build.yaml
 
-  
   run-sonarqube:
     needs: run-build
     uses: ./.github/workflows/SonarQube.yml
@@ -28,7 +27,6 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-
-
-
-
+  run-selenium:
+    needs: run-sonarqube  # Wait for SonarQube to finish
+    uses: ./.github/workflows/Selenium.yml
