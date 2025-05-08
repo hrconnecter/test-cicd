@@ -10,7 +10,6 @@
 
 
 
-
 name: Central Workflow
 
 on:
@@ -25,5 +24,5 @@ jobs:
     uses: ./.github/workflows/SonarQube.yml
 
   run-selenium:
-    uses: ./.github/workflows/Selenium.yml  # Use the reusable Selenium workflow
-  
+    needs: run-sonarqube
+    uses: ./.github/workflows/Selenium.yml
