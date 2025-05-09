@@ -29,7 +29,7 @@ jobs:
           echo "Running selected tests headlessly..."
           cd aegis
           CHROME_ARGS="--headless=new --no-sandbox --disable-dev-shm-usage --window-size=1920,1080"
-          mvn clean test -Dtest=essential.LoginLogout,essential.AddDepartment,essential.EmployeeOnboarding,enterprise.ExpenseManagement,basic.Form16 | tee full-test-output.txt || true
+          mvn clean test -Dtest=essential.LeaveManagement.java,essential.LoginLogout,essential.AddDepartment,essential.EmployeeOnboarding,enterprise.ExpenseManagement,basic.Form16 | tee full-test-output.txt || true
 
           echo "================ EXTRACTING CUSTOM TEST RESULTS ================="
           awk '/^={20,}/ {flag=1; print; next}
