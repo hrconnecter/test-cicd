@@ -1,4 +1,3 @@
-
 name: Central Workflow
 
 on:
@@ -17,6 +16,8 @@ jobs:
       SONAR_HOST_URL: http://13.202.182.26:9000
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      EMAIL_USERNAME: qa_report@aegiz.net
+      EMAIL_PASSWORD: Argan@2406
 
   run-selenium:  # 🧪 Selenium Tests
     needs: run-sonarqube
