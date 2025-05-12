@@ -51,16 +51,18 @@ jobs:
 
       - name: 📝 Generate SonarQube Report File
         run: |
-         curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
-         | jq '.component.measures[] | "\(.metric): \(.value)"' \
-         | sed 's/"//g' > sonarqube_report.txt
-         cat sonarqube_report.txt
-      # - name: 📝 Generate SonarQube Report File
-      #   run: |
-      #     curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
-      #     | jq '.component.measures[] | "\(.metric): \(.value)"' \
-      #     | sed 's/"//g' > sonarqube_report.txt
-      #     cat sonarqube_report.txt
+          RESPONSE=$(curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed")
+
+          echo "$RESPONSE" | jq . > response.json
+
+          if echo "$RESPONSE" | jq -e '.component.measures' > /dev/null; then
+            echo "$RESPONSE" | jq '.component.measures[] | "\(.metric): \(.value)"' | sed 's/"//g' > sonarqube_report.txt
+          else
+            echo "❗ No valid measures found. SonarQube analysis may have failed or not completed." > sonarqube_report.txt
+            echo "$RESPONSE" >> sonarqube_report.txt
+          fi
+
+          cat sonarqube_report.txt
 
       - name: 📧 Send SonarQube Report Email
         if: always()
