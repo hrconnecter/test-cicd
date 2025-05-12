@@ -35,6 +35,16 @@ jobs:
             -d "name=aegis-frontend" \
             -d "project=aegis-frontend" || echo "Project may already exist."
 
+      - name: 🔐 Assign Permissions to sonar-users Group
+        run: |
+          for permission in browse scan; do
+            curl -s -u $SONAR_TOKEN: \
+              -X POST "${SONAR_HOST_URL}/api/permissions/add_project_permission" \
+              -d "projectKey=aegis-frontend" \
+              -d "permission=$permission" \
+              -d "groupName=sonar-users"
+          done
+
       - name: 🔍 Run SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2.0.2
         env:
