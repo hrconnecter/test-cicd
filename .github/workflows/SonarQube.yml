@@ -1,1 +1,77 @@
+name: SonarQube Scan  # 🔍 Static Code Analysis with Quality Gate
+
+on:
+  workflow_call:
+    inputs:
+      SONAR_HOST_URL:
+        required: true
+        type: string
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      EMAIL_USERNAME:  # ⛓️ Add these email secrets in your repo
+        required: true
+      EMAIL_PASSWORD:
+        required: true
+
+jobs:
+  sonarqube:
+    name: SonarQube Scan and Quality Gate
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ inputs.SONAR_HOST_URL }}
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏗️ Create SonarQube Project (if not exists)
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" -u $SONAR_TOKEN: \
+            -X POST "${SONAR_HOST_URL}/api/projects/create" \
+            -d "name=aegis-frontend" \
+            -d "project=aegis-frontend" || echo "Project may already exist."
+
+      - name: 🔍 Run SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2.0.2
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+
+      - name: ✅ Check SonarQube Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+        with:
+          sonarHostUrl: ${{ env.SONAR_HOST_URL }}
+          projectKey: aegis-frontend
+
+      - name: 📝 Generate SonarQube Report File
+        run: |
+          curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
+          | jq '.component.measures[] | "\(.metric): \(.value)"' \
+          | sed 's/"//g' > sonarqube_report.txt
+          cat sonarqube_report.txt
+
+      - name: 📧 Send SonarQube Report Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "SonarQube Report - aegis-frontend"
+          to: yourmanager@example.com  # Replace with your recipient
+          from: ${{ secrets.EMAIL_USERNAME }}
+          body: |
+            Hello,
+
+            Please find the attached SonarQube scan report (.txt format) for aegis-frontend.
+
+            Regards,
+            GitHub Actions CI/CD
+          attachments: sonarqube_report.txt
 
