@@ -35,16 +35,6 @@ jobs:
             -d "name=aegis-frontend" \
             -d "project=aegis-frontend" || echo "Project may already exist."
 
-      - name: 🔐 Assign Permissions to sonar-users Group
-        run: |
-          for permission in browse scan; do
-            curl -s -u $SONAR_TOKEN: \
-              -X POST "${SONAR_HOST_URL}/api/permissions/add_project_permission" \
-              -d "projectKey=aegis-frontend" \
-              -d "permission=$permission" \
-              -d "groupName=sonar-users"
-          done
-
       - name: 🔍 Run SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2.0.2
         env:
@@ -59,51 +49,7 @@ jobs:
           sonarHostUrl: ${{ env.SONAR_HOST_URL }}
           projectKey: aegis-frontend
 
-      - name: 📝 Generate SonarQube Report File
-        run: |
-          echo "⏳ Waiting 20 seconds to allow SonarQube to finalize the analysis..."
-          sleep 20
+    
+  
 
-          for i in {1..5}; do
-            echo "🔁 Attempt $i to fetch metrics..."
-            RESPONSE=$(curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed")
-
-            echo "$RESPONSE" | jq . > response.json
-
-            if echo "$RESPONSE" | jq -e '.component.measures' > /dev/null; then
-              echo "$RESPONSE" | jq -r '.component.measures[] | "\(.metric): \(.value // "N/A")"' > sonarqube_report.txt
-              echo "✅ SonarQube metrics fetched successfully."
-              break
-            else
-              echo "⚠️ Metrics not ready. Retrying in 10 seconds..."
-              sleep 10
-            fi
-          done
-
-          if [ ! -s sonarqube_report.txt ]; then
-            echo "❌ Failed to fetch SonarQube metrics after multiple attempts." > sonarqube_report.txt
-            cat response.json >> sonarqube_report.txt
-          fi
-
-          echo "--- Report Preview ---"
-          cat sonarqube_report.txt
-
-      - name: 📧 Send SonarQube Report Email
-        if: always()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: mail.aegiz.net
-          server_port: 465
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          from: ${{ secrets.EMAIL_USERNAME }}
-          to: rahul.varne@argantechnology.com
-          subject: GitHub Actions - SonarQube Report
-          body: |
-            Hi Yash,
-
-            Please find the attached SonarQube scan report (.txt format) for aegis-frontend.
-
-            Regards,  
-            GitHub CI/CD Bot
-          attachments: sonarqube_report.txt
+  
