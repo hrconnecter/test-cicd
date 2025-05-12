@@ -8,51 +8,16 @@ jobs:
     # 🛠️ Step 1: Run the build pipeline
     uses: ./.github/workflows/build.yaml
 
-  run-sonarqube:
+  run-sonarqube:  # 🔍 SonarQube Code Analysis
     needs: run-build
+    # 🧪 Step 2: Run static code analysis using SonarQube
     uses: ./.github/workflows/SonarQube.yml
     with:
       SONAR_HOST_URL: http://13.202.182.26:9000
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
   run-selenium:  # 🧪 Selenium Tests
     needs: run-sonarqube
     # ✅ Step 3: Run end-to-end Selenium tests after SonarQube analysis
     uses: ./.github/workflows/Selenium.yml
-
-
-
-
-
-
-
-
-
-# name: Central Workflow
-
-# on:
-#   workflow_dispatch:  # 🚀 Manual trigger for the workflow
-
-# jobs:
-#   run-build:  # 🔧 Build Job
-#     # 🛠️ Step 1: Run the build pipeline
-#     uses: ./.github/workflows/build.yaml
-
-#   run-sonarqube:  # 🔍 SonarQube Code Analysis
-#     needs: run-build
-#     # 🧪 Step 2: Run static code analysis using SonarQube
-#     uses: ./.github/workflows/SonarQube.yml
-#     with:
-#       SONAR_HOST_URL: http://13.202.182.26:9000
-#     secrets:
-#       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#       EMAIL_USERNAME: qa_report@aegiz.net
-#       EMAIL_PASSWORD: Argan@2406
-
-#   run-selenium:  # 🧪 Selenium Tests
-#     needs: run-sonarqube
-#     # ✅ Step 3: Run end-to-end Selenium tests after SonarQube analysis
-#     uses: ./.github/workflows/Selenium.yml
