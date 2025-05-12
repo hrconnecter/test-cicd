@@ -49,28 +49,28 @@ jobs:
           sonarHostUrl: ${{ env.SONAR_HOST_URL }}
           projectKey: aegis-frontend
 
-      - name: 📝 Generate SonarQube Report File
-        run: |
-          curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
-          | jq '.component.measures[] | "\(.metric): \(.value)"' \
-          | sed 's/"//g' > sonarqube_report.txt
-          cat sonarqube_report.txt
+      # - name: 📝 Generate SonarQube Report File
+      #   run: |
+      #     curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
+      #     | jq '.component.measures[] | "\(.metric): \(.value)"' \
+      #     | sed 's/"//g' > sonarqube_report.txt
+      #     cat sonarqube_report.txt
 
-      - name: 📧 Send SonarQube Report Email
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: qa_report@aegiz.net
-          password: Argan@2406
-          subject: "SonarQube Report - aegis-frontend"
-          to: yash.shirke@argantechnology.com
-          from: qa_report@aegiz.net
-          body: |
-            Hello,
+      # - name: 📧 Send SonarQube Report Email
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: smtp.gmail.com
+      #     server_port: 465
+      #     username: qa_report@aegiz.net
+      #     password: Argan@2406
+      #     subject: "SonarQube Report - aegis-frontend"
+      #     to: yash.shirke@argantechnology.com
+      #     from: qa_report@aegiz.net
+      #     body: |
+      #       Hello,
 
-            Please find the attached SonarQube scan report (.txt format) for aegis-frontend.
+      #       Please find the attached SonarQube scan report (.txt format) for aegis-frontend.
 
-            Regards,
-            GitHub Actions CI/CD
-          attachments: sonarqube_report.txt
+      #       Regards,
+      #       GitHub Actions CI/CD
+      #     attachments: sonarqube_report.txt
