@@ -16,6 +16,8 @@ jobs:
       SONAR_HOST_URL: http://13.202.182.26:9000
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
   run-selenium:  # 🧪 Selenium Tests
     needs: run-sonarqube
