@@ -50,19 +50,34 @@ jobs:
           projectKey: aegis-frontend
 
       - name: 📝 Generate SonarQube Report File
-        run: |
-          RESPONSE=$(curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed")
+    run: |
+      echo "⏳ Waiting 20 seconds to allow SonarQube to finalize the analysis..."
+      sleep 20
 
-          echo "$RESPONSE" | jq . > response.json
+      for i in {1..5}; do
+      echo "🔁 Attempt $i to fetch metrics..."
+      RESPONSE=$(curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed")
 
-          if echo "$RESPONSE" | jq -e '.component.measures' > /dev/null; then
-            echo "$RESPONSE" | jq '.component.measures[] | "\(.metric): \(.value)"' | sed 's/"//g' > sonarqube_report.txt
-          else
-            echo "❗ No valid measures found. SonarQube analysis may have failed or not completed." > sonarqube_report.txt
-            echo "$RESPONSE" >> sonarqube_report.txt
-          fi
+      echo "$RESPONSE" | jq . > response.json
 
-          cat sonarqube_report.txt
+      if echo "$RESPONSE" | jq -e '.component.measures' > /dev/null; then
+        echo "$RESPONSE" | jq -r '.component.measures[] | "\(.metric): \(.value // "N/A")"' > sonarqube_report.txt
+        echo "✅ SonarQube metrics fetched successfully."
+        break
+      else
+        echo "⚠️ Metrics not ready. Retrying in 10 seconds..."
+        sleep 10
+      fi
+    done
+
+    if [ ! -s sonarqube_report.txt ]; then
+      echo "❌ Failed to fetch SonarQube metrics after multiple attempts." > sonarqube_report.txt
+      cat response.json >> sonarqube_report.txt
+    fi
+
+    echo "--- Report Preview ---"
+    cat sonarqube_report.txt
+
 
       - name: 📧 Send SonarQube Report Email
         if: always()
