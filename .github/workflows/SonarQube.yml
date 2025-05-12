@@ -56,21 +56,21 @@ jobs:
           | sed 's/"//g' > sonarqube_report.txt
           cat sonarqube_report.txt
 
-           - name: 📧 Send SonarQube Report Email
+      - name: 📧 Send SonarQube Report Email
         if: always()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: mail.aegiz.net
           server_port: 465
-          username: qa_report@aegiz.net
-          password: Argan@2406
-          from: qa_report@aegiz.net
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          from: ${{ secrets.EMAIL_USERNAME }}
           to: yash.shirke@argantechnology.com
-          subject: GitHub Actions - Selenium Test Report
+          subject: GitHub Actions - SonarQube Report
           body: |
             Hi Yash,
 
-              Please find the attached SonarQube scan report (.txt format) for aegis-frontend.
+            Please find the attached SonarQube scan report (.txt format) for aegis-frontend.
 
             Regards,  
             GitHub CI/CD Bot
