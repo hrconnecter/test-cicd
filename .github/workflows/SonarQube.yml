@@ -65,7 +65,7 @@ jobs:
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
           from: ${{ secrets.EMAIL_USERNAME }}
-          to: yash.shirke@argantechnology.com
+          to: rahul.varne@argantechnology.com
           subject: GitHub Actions - SonarQube Report
           body: |
             Hi Yash,
