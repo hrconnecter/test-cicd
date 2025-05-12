@@ -1,57 +1,23 @@
-name: Central Workflow
-
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Select the environment (dev, qa, prod)'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
-          - qa
-          - main
+  workflow_dispatch:  # 🚀 Manual trigger for the workflow
 
 jobs:
-  run-build:
-    name: Build Job
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}  # Set dynamic environment based on input
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Run build script for ${{ inputs.environment }}
-        run: |
-          echo "Running build for ${{ inputs.environment }}"
+  run-build:  # 🔧 Build Job
+    # 🛠️ Step 1: Run the build pipeline
+    uses: ./.github/workflows/build.yaml
 
-  run-sonarqube:
-    name: SonarQube Code Analysis
+  run-sonarqube:  # 🔍 SonarQube Code Analysis
     needs: run-build
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}  # Set dynamic environment based on input
-    steps:
-      - name: Run SonarQube Scan for ${{ inputs.environment }}
-        uses: ./.github/workflows/SonarQube.yml
-        with:
-          SONAR_HOST_URL: http://13.202.182.26:9000
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+    # 🧪 Step 2: Run static code analysis using SonarQube
+    uses: ./.github/workflows/SonarQube.yml
+    with:
+      SONAR_HOST_URL: http://13.202.182.26:9000
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
-  run-selenium:
-    name: Run Selenium Tests
+  run-selenium:  # 🧪 Selenium Tests
     needs: run-sonarqube
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}  # Set dynamic environment based on input
-    steps:
-      - name: Run Selenium Tests for ${{ inputs.environment }}
-        uses: ./.github/workflows/Selenium.yml
-        with:
-          environment: ${{ inputs.environment }}  # Pass environment variable
+    # ✅ Step 3: Run end-to-end Selenium tests after SonarQube analysis
+    uses: ./.github/workflows/Selenium.yml
