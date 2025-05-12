@@ -51,10 +51,16 @@ jobs:
 
       - name: 📝 Generate SonarQube Report File
         run: |
-          curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
-          | jq '.component.measures[] | "\(.metric): \(.value)"' \
-          | sed 's/"//g' > sonarqube_report.txt
-          cat sonarqube_report.txt
+         curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
+         | jq '.component.measures[] | "\(.metric): \(.value)"' \
+         | sed 's/"//g' > sonarqube_report.txt
+         cat sonarqube_report.txt
+      # - name: 📝 Generate SonarQube Report File
+      #   run: |
+      #     curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
+      #     | jq '.component.measures[] | "\(.metric): \(.value)"' \
+      #     | sed 's/"//g' > sonarqube_report.txt
+      #     cat sonarqube_report.txt
 
       - name: 📧 Send SonarQube Report Email
         if: always()
