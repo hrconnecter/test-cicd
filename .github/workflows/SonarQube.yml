@@ -1,55 +1,47 @@
 name: SonarQube Scan  # 🔍 Static Code Analysis with Quality Gate
 
 on:
-  workflow_call:
+  workflow_call:  # 🔁 Allows this workflow to be triggered from other workflows
     inputs:
-      SONAR_HOST_URL:
+      SONAR_HOST_URL:  # 🌐 URL to your SonarQube server
         required: true
         type: string
     secrets:
-      SONAR_TOKEN:
-        required: true
-      EMAIL_USERNAME:
-        required: true
-      EMAIL_PASSWORD:
+      SONAR_TOKEN:  # 🔐 Token for SonarQube authentication
         required: true
 
 jobs:
   sonarqube:
-    name: SonarQube Scan and Quality Gate
-    runs-on: ubuntu-latest
+    name: SonarQube Scan and Quality Gate  # ✅ Ensure code quality standards
+    runs-on: ubuntu-latest  # 💻 Use latest Ubuntu environment
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: ${{ inputs.SONAR_HOST_URL }}
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # 🔄 Get the source code
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # 🔁 Full history for accurate analysis
 
       - name: 🏗️ Create SonarQube Project (if not exists)
         run: |
+          # 🛠️ Tries to create the project; ignores error if it already exists
           curl -s -o /dev/null -w "%{http_code}" -u $SONAR_TOKEN: \
             -X POST "${SONAR_HOST_URL}/api/projects/create" \
             -d "name=aegis-frontend" \
             -d "project=aegis-frontend" || echo "Project may already exist."
 
       - name: 🔍 Run SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2.0.2
+        uses: SonarSource/sonarqube-scan-action@v2.0.2  # 🧪 Scans the codebase
         env:
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
 
       - name: ✅ Check SonarQube Quality Gate
-        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0  # 🚦 Enforces quality rules
         env:
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
         with:
           sonarHostUrl: ${{ env.SONAR_HOST_URL }}
           projectKey: aegis-frontend
-
-    
-  
-
-  
