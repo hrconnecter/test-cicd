@@ -1,50 +1,83 @@
 name: SonarQube Scan  # 🔍 Static Code Analysis with Quality Gate
 
 on:
-  workflow_call:  # 🔁 Allows this workflow to be triggered from other workflows
+  workflow_call:
     inputs:
-      SONAR_HOST_URL:  # 🌐 URL to your SonarQube server
+      SONAR_HOST_URL:
         required: true
         type: string
     secrets:
-      SONAR_TOKEN:  # 🔐 Token for SonarQube authentication
+      SONAR_TOKEN:
+        required: true
+      EMAIL_USERNAME:
+        required: true
+      EMAIL_PASSWORD:
         required: true
 
 jobs:
   sonarqube:
-    name: SonarQube Scan and Quality Gate  # ✅ Ensure code quality standards
-    runs-on: ubuntu-latest  # 💻 Use latest Ubuntu environment
+    name: SonarQube Scan and Quality Gate
+    runs-on: ubuntu-latest
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: ${{ inputs.SONAR_HOST_URL }}
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4  # 🔄 Get the source code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 🔁 Full history for accurate analysis
+          fetch-depth: 0
 
       - name: 🏗️ Create SonarQube Project (if not exists)
         run: |
-          # 🛠️ Tries to create the project; ignores error if it already exists
           curl -s -o /dev/null -w "%{http_code}" -u $SONAR_TOKEN: \
             -X POST "${SONAR_HOST_URL}/api/projects/create" \
             -d "name=aegis-frontend" \
             -d "project=aegis-frontend" || echo "Project may already exist."
 
       - name: 🔍 Run SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2.0.2  # 🧪 Scans the codebase
+        uses: SonarSource/sonarqube-scan-action@v2.0.2
         env:
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
 
       - name: ✅ Check SonarQube Quality Gate
-        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0  # 🚦 Enforces quality rules
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         env:
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
         with:
           sonarHostUrl: ${{ env.SONAR_HOST_URL }}
           projectKey: aegis-frontend
 
+      - name: 📝 Generate SonarQube Report File
+        run: |
+         curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
+         | jq '.component.measures[] | "\(.metric): \(.value)"' \
+         | sed 's/"//g' > sonarqube_report.txt
+         cat sonarqube_report.txt
+      # - name: 📝 Generate SonarQube Report File
+      #   run: |
+      #     curl -s -u $SONAR_TOKEN: "${SONAR_HOST_URL}/api/measures/component?component=aegis-frontend&metricKeys=alert_status,reliability_rating,maintainability_rating,coverage,duplicated_lines_density,security_hotspots_reviewed" \
+      #     | jq '.component.measures[] | "\(.metric): \(.value)"' \
+      #     | sed 's/"//g' > sonarqube_report.txt
+      #     cat sonarqube_report.txt
 
+      # - name: 📧 Send SonarQube Report Email
+      #   if: always()
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: mail.aegiz.net
+      #     server_port: 465
+      #     username: ${{ secrets.EMAIL_USERNAME }}
+      #     password: ${{ secrets.EMAIL_PASSWORD }}
+      #     from: ${{ secrets.EMAIL_USERNAME }}
+      #     to: rahul.varne@argantechnology.com
+      #     subject: GitHub Actions - SonarQube Report
+      #     body: |
+      #       Hi Yash,
 
+      #       Please find the attached SonarQube scan report (.txt format) for aegis-frontend.
+
+      #       Regards,  
+      #       GitHub CI/CD Bot
+      #     attachments: sonarqube_report.txt
