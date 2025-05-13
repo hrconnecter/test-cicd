@@ -45,3 +45,6 @@ jobs:
         with:
           sonarHostUrl: ${{ env.SONAR_HOST_URL }}
           projectKey: aegis-frontend
+
+
+
