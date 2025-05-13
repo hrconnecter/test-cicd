@@ -21,3 +21,4 @@ jobs:
     needs: run-sonarqube
     # ✅ Step 3: Run end-to-end Selenium tests after SonarQube analysis
     uses: ./.github/workflows/Selenium.yml
+
