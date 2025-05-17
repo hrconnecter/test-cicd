@@ -1,28 +1,42 @@
-name: 🚀 Build and Deploy
+name: 🚀 QA Deploy
 
 on:
   workflow_call:
+    secrets:
+      QA_ENV_FILE:
+        required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clear caches
+        run: |
+          sudo apt-get clean
+          sudo apt-get autoclean
+          sudo apt-get autoremove -y
+
       - name: 🔄 Checkout code
         uses: actions/checkout@v4
-
-      - name: ⚙️ Set up Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          ref: qa-branch
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: npm install --force
 
-      - name: 🏗️ Build
+      - name: 🏗️ Set up environment
+        env:
+          NODE_OPTIONS: "--max-old-space-size=6144"
         run: |
-          echo "${{ secrets.PROD_ENV_FILE }}" | base64 --decode > .env
-          npm run build
+          touch .env
+          echo "${{ secrets.QA_ENV_FILE }}" > .env
+          cat .env  # Debug only
+
+      - name: 🏗️ Build project
+        env:
+          NODE_OPTIONS: "--max-old-space-size=6144"
+        run: npm run build
 
       - name: 🚀 Upload build
         uses: actions/upload-artifact@v4
@@ -32,8 +46,7 @@ jobs:
 
   release-project:
     name: 🚀 Release project
-    runs-on: ubuntu-latest
-
+    runs-on: [qa-frontend-main]
     needs: build
 
     steps:
@@ -43,5 +56,63 @@ jobs:
           name: static-site
 
       - name: 🧪 Test artifact download
-        run: |
-          ls -R
+        run: ls -R
+
+
+
+
+
+
+
+
+
+
+
+
+# name: 🚀 Build and Deploy
+
+# on:
+#   workflow_call:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: 🔄 Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: ⚙️ Set up Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 14
+
+#       - name: 📦 Install dependencies
+#         run: npm install
+
+#       - name: 🏗️ Build
+#         run: |
+#           echo "${{ secrets.PROD_ENV_FILE }}" | base64 --decode > .env
+#           npm run build
+
+#       - name: 🚀 Upload build
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: static-site
+#           path: build/
+
+#   release-project:
+#     name: 🚀 Release project
+#     runs-on: ubuntu-latest
+
+#     needs: build
+
+#     steps:
+#       - name: 📥 Download artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: static-site
+
+#       - name: 🧪 Test artifact download
+#         run: |
+#           ls -R
