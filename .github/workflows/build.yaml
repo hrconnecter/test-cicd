@@ -30,7 +30,7 @@ jobs:
           NODE_OPTIONS: "--max-old-space-size=6144"
         run: |
           touch .env
-          echo "${{ secrets.QA_ENV_FILE }}" > .env
+          echo "${{ secrets.PROD_ENV_FILE }}" > .env
           cat .env  # Debug only
 
       - name: 🏗️ Build project
